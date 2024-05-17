@@ -11,11 +11,7 @@ M.waddle = function(buf, speed, conf, strategy)
     if vim.api.nvim_win_is_valid(buf) then
       local config = vim.api.nvim_win_get_config(buf)
       local col, row = 0, 0
-      if vim.version().minor < 10 then       -- Neovim 0.9
-        col, row = config["col"][false], config["row"][false]
-      else                                   -- Neovim 0.10
-        col, row = config["col"], config["row"]
-      end
+      col, row = config["col"], config["row"]
 
       local pos = strategy({ row = row, col = col })
       config["row"] = pos.row
@@ -24,6 +20,7 @@ M.waddle = function(buf, speed, conf, strategy)
       vim.api.nvim_win_set_config(buf, config)
     end
   end))
+  return new_duck
 end
 
 return M

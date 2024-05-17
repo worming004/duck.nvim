@@ -32,7 +32,8 @@ M.hatch = function(character, speed, color, strategy)
     strategy = default_strategies.random_waddle
   end
 
-  waddle.waddle(duck, speed, conf, strategy)
+  local new_duck = waddle.waddle(duck, speed, conf, strategy)
+  table.insert(M.ducks_list, new_duck)
 end
 
 M.cook = function()
