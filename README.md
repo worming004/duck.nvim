@@ -22,15 +22,18 @@ A duck that waddles between your codes
 ```
 
 To set custom character:
+
 ```lua
-nnoremap <leader>dd :lua require("duck").hatch("ඞ")<CR>
+nnoremap <leader>dd :lua require("duck").hatch({ character = "ඞ" })<CR>
 ```
-> popular candidates: 🦆 ඞ  🦀 🐈 🐎 🦖 🐤 
+
+> popular candidates: 🦆 ඞ 🦀 🐈 🐎 🦖 🐤
 
 You can also specify how fast a duck moves (measured in steps per second):
+
 ```lua
-vim.keymap.set('n', '<leader>dd', function() require("duck").hatch("🦆", 10) end, {}) -- A pretty fast duck
-vim.keymap.set('n', '<leader>dc', function() require("duck").hatch("🐈", 0.75) end, {}) -- Quite a mellow cat
+vim.keymap.set('n', '<leader>dd', function() require("duck").hatch({ character = "🦆", speed = 10 }) end, {}) -- A pretty fast duck
+vim.keymap.set('n', '<leader>dc', function() require("duck").hatch({ character = "🐈", speed = 0.75 }) end, {}) -- Quite a mellow cat
 ```
 
 ### New position strategies
@@ -38,19 +41,22 @@ vim.keymap.set('n', '<leader>dc', function() require("duck").hatch("🐈", 0.75)
 hatch function support a strategy to pass to override the current one.
 
 for example, the following strategy always push the duck to the right:
+
 ```lua
 local always_right_strategy = function(positions) -- {col = <val>, row = <val>}
     return {col = positions.col + 1, row = positions.row}
 end
 
-require("duck").hatch("🦆", 5, "none", always_right_strategy)
+require("duck").hatch({ character = "🦆", speed = 5, color = "none", strategy = always_right_strategy })
 ```
 
 > This strategies is available at `require("duck").default_strategies.always_right_strategy`
 
 ### Features
+
 - can release multiple ducks.
 - does not load on startup.
 - Light weight, <100 LOC
 - Its a duck
 - custom strategies for new position
+
