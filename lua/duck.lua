@@ -12,27 +12,31 @@ local default_strategies = {
   end,
   random_waddle = function(positions)
     return random_wandle:random_waddle()(positions)
+  end,
+  favor_top_right = function(positions)
+    return random_wandle:favor_top_right()(positions)
   end
 }
 
 
 M.default_strategies = default_strategies
 
-M.hatch = function(character, speed, color, strategy)
+---@param opts { character: string, speed: number, color: string, strategy: fun(pos: {col: number, row: number}): {col: number, row: number}}
+M.hatch = function(opts)
   local buf = vim.api.nvim_create_buf(false, true)
-  vim.api.nvim_buf_set_lines(buf, 0, 1, true, { character or conf.character })
+  vim.api.nvim_buf_set_lines(buf, 0, 1, true, { opts.character or conf.character })
 
   local duck = vim.api.nvim_open_win(buf, false, {
     relative = 'cursor', style = 'minimal', row = 1, col = 1, width = conf.width, height = conf.height
   })
-  vim.cmd("hi Duck" .. duck .. " guifg=" .. (color or conf.color) .. " guibg=none blend=" .. conf.blend)
+  vim.cmd("hi Duck" .. duck .. " guifg=" .. (opts.color or conf.color) .. " guibg=none blend=" .. conf.blend)
   vim.api.nvim_win_set_option(duck, 'winhighlight', 'Normal:Duck' .. duck)
 
-  if strategy == nil then
-    strategy = default_strategies.random_waddle
+  if opts.strategy == nil then
+    opts.strategy = default_strategies.random_waddle
   end
 
-  local new_duck = waddle.waddle(duck, speed, conf, strategy)
+  local new_duck = waddle.waddle(duck, opts.speed, conf, opts.strategy)
   table.insert(M.ducks_list, new_duck)
 end
 

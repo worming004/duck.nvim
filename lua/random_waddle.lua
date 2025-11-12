@@ -35,4 +35,29 @@ function M.random_waddle(self)
   end
 end
 
+function M.favor_top_right(self)
+  return function(duck)
+    local row = duck.row
+    local col = duck.col
+
+    local go_bottom = false
+    if row < vim.o.lines * 0.7 then
+      go_bottom = self:get_random() > 0.7
+      if go_bottom then
+        return { row = row + 0.5, col = col }
+      end
+    end
+
+    local go_right = false
+    if col < vim.o.columns * 0.7 then
+      go_right = self:get_random() > 0.7
+      if go_right then
+        return { row = row, col = col - 1 }
+      end
+    end
+
+    return self.random_waddle(self)(duck)
+  end
+end
+
 return M
